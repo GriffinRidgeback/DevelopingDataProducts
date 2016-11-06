@@ -1,0 +1,66 @@
+---
+title: "Developing Data Products - Leaflet"
+author: "Kevin E. D'Elia"
+date: "11/6/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Map of Farmer's Markets in the Baltimore area
+This is an interactive map created using the [Leaflet](https://rstudio.github.io/leaflet/) package.  It shows the locations of Farmer's Markets in the Baltimore City area.  Data was obtained from the [Open Baltimore](https://data.baltimorecity.gov) website.
+```{r leaflet}
+# Set working directory
+setwd("~/Development/DevelopingDataProducts/Leaflet")
+
+# Load the Farmers' Market dataset
+farmers <- read.csv("Baltimore_City_Farmers_Markets.csv", stringsAsFactors = FALSE)
+
+# Ignore the first 3 rows, as there is no meaningful information there
+farmers <- farmers[4:nrow(farmers), ]
+
+# Extract the location column for processing
+market.locations <- farmers[, "Location.1"]
+
+# Split on the first co-ordinate marker
+x <- strsplit(market.locations, "(", fixed = TRUE)
+
+marketLat <- c(39.316895224431384, 39.35301965002411, 39.29805046400361, 39.280449285306304, 39.368130133136845, 39.34017920446621, 39.3510879806816, 39.22625687895186, 39.35590834675867, 39.30244365211678, 39.308891791066856, 39.28829162895556, 39.289412428870854, 39.27331461158775, 39.32406285941346, 39.347220895955616, 39.29309070301201)
+
+marketLong <- c(-76.64628323249057, -76.66995371881086, -76.6220679907452, -76.56058100031288, -76.6499784499245, -76.57224105371182, -76.60974278233363, -76.6165247473192, -76.64425876181815, -76.62156886701894, -76.61641575179101, -76.59223011622686, -76.61644822815315, -76.60168485695112, -76.72039618463617, -76.65972710072214, -76.65175011432223)
+
+marketsLatLong <- data.frame(lat = marketLat, long = marketLong)
+
+marketSites <- 
+c(paste(sep = "<br/>","<b>Druid Hill</b>", "3100 Swann Drive", "Baltimore, MD 21217"),
+paste(sep = "<br/>","<b>Park Heights Community</b>", "5201 Park Heights Ave Pimlico Race Course", "Baltimore, MD 21215"),
+paste(sep = "<br/>","<b>University of Maryland</b>", "Plaza Park Corner of Paca Street", "Baltimore, MD 21201"),
+paste(sep = "<br/>","<b>Highlandtown</b>", "400 Conkling Street at Eastern Ave", "Baltimore, MD 21224"),
+paste(sep = "<br/>","<b>Mt. Washington Whole Foods</b>", "1330 Smith Ave", "Baltimore, MD 21209"),
+paste(sep = "<br/>","<b>Tuesday Market in Lauraville</b>", "4500 Harford Road", "Baltimore, MD 21214"),
+paste(sep = "<br/>","<b>Govanstowne (Loyola)</b>", "5104 York Road", "Baltimore, MD"),
+paste(sep = "<br/>","<b>Harbor Hospital Community</b>", "3001 Hanover Street at the corner of Reedbird Avenue", "Baltimore, MD 21225"),
+paste(sep = "<br/>","<b>Village of Cross Keys</b>", "5100 Falls Road", "Baltimore, MD 21210"),
+paste(sep = "<br/>","<b>tate Center Community</b>", "201 Preston Street", "Baltimore, MD 21201"),
+paste(sep = "<br/>","<b>Charles Street</b>", "1700 Charles Street Lanvale Ave at the 1700 Block of Charles Street", "Baltimore, MD 21201"),
+paste(sep = "<br/>","<b>Fell's Point Main Street</b>", "800 Broadway Broadway Square", "Baltimore, MD 21231"),
+paste(sep = "<br/>","<b>Fresh Friday</b>", "10 Hopkins Plaza", "Baltimore, MD 21202"),
+paste(sep = "<br/>","<b>BMI</b>", "1415 Key Highway", "Baltimore, MD 21230"),
+paste(sep = "<br/>","<b>Howard Park Community</b>", "3600 Block Woodbine Ave", "Baltimore, MD 21207"),
+paste(sep = "<br/>","<b>Go Life / Cylburn</b>", "2605 Bannister Road", "Baltimore, MD 21215"),
+paste(sep = "<br/>","<b>West Baltimore MARC</b>", "400 Smallwood Street", "Baltimore, MD 21223"))
+
+library(leaflet)
+
+marketIcon <- makeIcon(
+  iconUrl = "http://us.123rf.com/450wm/ikopylov/ikopylov1511/ikopylov151100006/48012902-local-farmer-market-farm-icon-design-vector-illustration.jpg?ver=6",
+  iconWidth = 40, iconHeight = 40,
+  iconAnchorX = 30, iconAnchorY = 10,
+  shadowWidth = 50, shadowHeight = 64,
+  shadowAnchorX = 4, shadowAnchorY = 62
+)
+
+marketsLatLong  %>% leaflet() %>% addTiles() %>% addMarkers(popup = marketSites, icon = marketIcon)
+```
