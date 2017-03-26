@@ -14,13 +14,9 @@ This is an interactive map created using the [plotly](https://plot.ly/r/) packag
 Slide With Code
 ========================================================
 
-```{r load.library, echo=FALSE}
-suppressMessages(library("plotly"))
-suppressMessages(library("tidyr"))
-suppressMessages(library("magrittr"))
-suppressMessages(library("webshot"))
-```
-```{r process.data}
+
+
+```r
 # Create data frame
 world.phones <- as.data.frame(WorldPhones)
 
@@ -31,26 +27,9 @@ by.country <- gather(world.phones, key, country)
 Slide With Plot
 ========================================================
 
-```{r, results='hide', echo=FALSE}
-library(plotly)
 
 
-k <- plot_ly(by.country,
-             type = "box",        
-             x = ~country,        
-             color = ~key         
-) %>%
 
-  layout(                        
-         title = "Phones by Continent", 
-         xaxis = list(           
-            title = "Count",     
-            showgrid = F))
-
-htmlwidgets::saveWidget(as.widget(k), file = "demo.html")
-
-#p = plot_ly(longley, x = ~GNP, y =~Unemployed / 100)
-#htmlwidgets::saveWidget(as.widget(p), file = "demo.html")
 ```
-<iframe src="demo.html" style="position:absolute;height:100%;width:100%"></iframe>
- 
+Error in file(con, "rb") : cannot open the connection
+```
