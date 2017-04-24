@@ -1,0 +1,10 @@
+name: Demo
+title: Demo
+account: thedatascientist
+server: shinyapps.io
+appId: 137322
+bundleId: 613225
+url: https://thedatascientist.shinyapps.io/Demo/
+when: 1479050615.2122
+asMultiple: FALSE
+asStatic: FALSE
